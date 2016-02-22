@@ -42,12 +42,14 @@
             this.rtb = new System.Windows.Forms.RichTextBox();
             this.cbxShowElements = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.nudCubeIndex = new System.Windows.Forms.NumericUpDown();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.nudParts)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCubeIndex)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -118,7 +120,7 @@
             this.hsbAxisY.Size = new System.Drawing.Size(184, 24);
             this.hsbAxisY.TabIndex = 2;
             this.hsbAxisY.Tag = "Z rotation angle";
-            this.hsbAxisY.Value = 60;
+            this.hsbAxisY.Value = 330;
             this.hsbAxisY.ValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
             // 
             // hsbAxisX
@@ -146,7 +148,7 @@
             // 
             // nudParts
             // 
-            this.nudParts.Location = new System.Drawing.Point(840, 24);
+            this.nudParts.Location = new System.Drawing.Point(789, 12);
             this.nudParts.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -168,7 +170,7 @@
             // 
             // btnDivide
             // 
-            this.btnDivide.Location = new System.Drawing.Point(764, 24);
+            this.btnDivide.Location = new System.Drawing.Point(713, 12);
             this.btnDivide.Name = "btnDivide";
             this.btnDivide.Size = new System.Drawing.Size(75, 20);
             this.btnDivide.TabIndex = 10;
@@ -205,12 +207,36 @@
             this.pictureBox1.TabIndex = 13;
             this.pictureBox1.TabStop = false;
             // 
+            // nudCubeIndex
+            // 
+            this.nudCubeIndex.Location = new System.Drawing.Point(840, 209);
+            this.nudCubeIndex.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudCubeIndex.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudCubeIndex.Name = "nudCubeIndex";
+            this.nudCubeIndex.Size = new System.Drawing.Size(42, 20);
+            this.nudCubeIndex.TabIndex = 14;
+            this.nudCubeIndex.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudCubeIndex.ValueChanged += new System.EventHandler(this.nudCubeIndex_ValueChanged);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1033, 660);
+            this.Controls.Add(this.nudCubeIndex);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.cbxShowElements);
             this.Controls.Add(this.rtb);
@@ -231,6 +257,7 @@
             this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Window_KeyUp);
             ((System.ComponentModel.ISupportInitialize)(this.nudParts)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCubeIndex)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,6 +274,7 @@
         private System.Windows.Forms.RichTextBox rtb;
         private System.Windows.Forms.CheckBox cbxShowElements;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.NumericUpDown nudCubeIndex;
     }
 }
 

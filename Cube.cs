@@ -57,6 +57,8 @@
 
     public class CubeElement : Cube
     {
+        public int Index { get; set; }
+
         public Point Point9 { get { return GetMiddle(Point1, Point2); } }
         public Point Point10 { get; }
         public Point Point11 { get; }

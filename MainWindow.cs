@@ -1,7 +1,6 @@
 ﻿using System;
 using Tao.FreeGlut;
 using Tao.OpenGl;
-using Tao.Platform;
 using System.Windows.Forms;
 using System.Collections.Generic;
 
@@ -13,12 +12,14 @@ namespace FEM
         private List<CubeElement> cubeElements;
         private Cube Cube { get; set; }
         private bool showElements = false;
+        private int selectedCubeIndex;
 
         public MainWindow()
         {
             InitializeComponent();
             glWindow.InitializeContexts();
             Cube = new Cube();
+            nudCubeIndex.Visible = false;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -119,7 +120,15 @@ namespace FEM
                 }
                 Gl.glColor3d(0, 1, 0);
 
-                DrawCube(cube, false);
+                if (selectedCubeIndex != cube.Index)
+                {
+                    DrawCube(cube, false);
+                }
+                else
+                {
+                    DrawCubeOld(cube);
+                }
+
             }
             Gl.glPopMatrix();
             Gl.glFlush();
@@ -174,74 +183,74 @@ namespace FEM
             Gl.glEnd();
         }
 
-        private void DrawCubeOld()
+        private void DrawCubeOld(Cube cube)
         {
             Gl.glColor3d(0, 0, 1);
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // top
             //Gl.glColor3f(1.0f, 0.0f, 0.0f);
             //Gl.glNormal3f(0.0f, 1.0f, 0.0f);
-            Gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(0.5f, 0.5f, -0.5f);
-            Gl.glVertex3f(-0.5f, 0.5f, -0.5f);
+            Gl.glVertex3d(cube.Point4.X, cube.Point4.Y, cube.Point4.Z);
+            Gl.glVertex3d(cube.Point3.X, cube.Point3.Y, cube.Point3.Z);
+            Gl.glVertex3d(cube.Point7.X, cube.Point7.Y, cube.Point7.Z);
+            Gl.glVertex3d(cube.Point8.X, cube.Point8.Y, cube.Point8.Z);
 
             Gl.glEnd();
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // front
             //Gl.glColor3f(0.0f, 1.0f, 0.0f);
             //Gl.glNormal3f(0.0f, 0.0f, 1.0f);
-            Gl.glVertex3f(0.5f, -0.5f, 0.5f);
-            Gl.glVertex3f(0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, -0.5f, 0.5f);
+            Gl.glVertex3d(cube.Point1.X, cube.Point1.Y, cube.Point1.Z);
+            Gl.glVertex3d(cube.Point2.X, cube.Point2.Y, cube.Point2.Z);
+            Gl.glVertex3d(cube.Point3.X, cube.Point3.Y, cube.Point3.Z);
+            Gl.glVertex3d(cube.Point4.X, cube.Point4.Y, cube.Point4.Z);
 
             Gl.glEnd();
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // right
             //Gl.glColor3f(0.0f, 0.0f, 1.0f);
             //Gl.glNormal3f(1.0f, 0.0f, 0.0f);
-            Gl.glVertex3f(0.5f, 0.5f, -0.5f);
-            Gl.glVertex3f(0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(0.5f, -0.5f, 0.5f);
-            Gl.glVertex3f(0.5f, -0.5f, -0.5f);
+            Gl.glVertex3d(cube.Point2.X, cube.Point2.Y, cube.Point2.Z);
+            Gl.glVertex3d(cube.Point3.X, cube.Point3.Y, cube.Point3.Z);
+            Gl.glVertex3d(cube.Point7.X, cube.Point7.Y, cube.Point7.Z);
+            Gl.glVertex3d(cube.Point5.X, cube.Point5.Y, cube.Point5.Z);
 
             Gl.glEnd();
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // left
             //Gl.glColor3f(0.0f, 0.0f, 0.5f);
             //Gl.glNormal3f(-1.0f, 0.0f, 0.0f);
-            Gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, 0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, 0.5f, -0.5f);
-            Gl.glVertex3f(-0.5f, -0.5f, -0.5f);
+            Gl.glVertex3d(cube.Point1.X, cube.Point1.Y, cube.Point1.Z);
+            Gl.glVertex3d(cube.Point4.X, cube.Point4.Y, cube.Point4.Z);
+            Gl.glVertex3d(cube.Point8.X, cube.Point8.Y, cube.Point8.Z);
+            Gl.glVertex3d(cube.Point5.X, cube.Point5.Y, cube.Point5.Z);
 
             //Gl.glEnd();
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // bottom
             //Gl.glColor3f(0.5f, 0.0f, 0.0f);
             //Gl.glNormal3f(0.0f, -1.0f, 0.0f);
-            Gl.glVertex3f(0.5f, -0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, -0.5f, 0.5f);
-            Gl.glVertex3f(-0.5f, -0.5f, -0.5f);
-            Gl.glVertex3f(0.5f, -0.5f, -0.5f);
+            Gl.glVertex3d(cube.Point1.X, cube.Point1.Y, cube.Point1.Z);
+            Gl.glVertex3d(cube.Point2.X, cube.Point2.Y, cube.Point2.Z);
+            Gl.glVertex3d(cube.Point6.X, cube.Point6.Y, cube.Point6.Z);
+            Gl.glVertex3d(cube.Point5.X, cube.Point5.Y, cube.Point5.Z);
 
             Gl.glEnd();
 
 
-            Gl.glBegin(Gl.GL_LINE_LOOP);
+            Gl.glBegin(Gl.GL_POLYGON);
             // back
             //Gl.glColor3f(0.0f, 0.5f, 0.0f);
             //Gl.glNormal3f(0.0f, 0.0f, -1.0f);
-            Gl.glVertex3f(0.5f, 0.5f, -0.5f);
-            Gl.glVertex3f(0.5f, -0.5f, -0.5f);
-            Gl.glVertex3f(-0.5f, -0.5f, -0.5f);
-            Gl.glVertex3f(-0.5f, 0.5f, -0.5f);
+            Gl.glVertex3d(cube.Point5.X, cube.Point5.Y, cube.Point5.Z);
+            Gl.glVertex3d(cube.Point6.X, cube.Point6.Y, cube.Point6.Z);
+            Gl.glVertex3d(cube.Point7.X, cube.Point7.Y, cube.Point7.Z);
+            Gl.glVertex3d(cube.Point8.X, cube.Point8.Y, cube.Point8.Z);
 
             Gl.glEnd();
         }
@@ -277,19 +286,21 @@ namespace FEM
             Point p1;
 
             cubeElements = new List<CubeElement>();
-
+            var index = 0;
             for (int y_itr = 0; y_itr < parts; y_itr++)
             {
                 for (int z_itr = 0; z_itr < parts; z_itr++)
                 {
                     for (int x_itr = 0; x_itr < parts; x_itr++)
                     {
+                        index++;
                         p1 = CalculatePoint(Cube.Point1, elementEdgeLength, z_itr, y_itr, x_itr);
-                        cubeElements.Add(new CubeElement(p1, elementEdgeLength));
+                        cubeElements.Add(new CubeElement(p1, elementEdgeLength) { Index = index });
                     }
                 }
             }
-
+            nudCubeIndex.Visible = true;
+            nudCubeIndex.Maximum = cubeElements.Count;
             cbxShowElements.Checked = true;
             DrawMultipleFigures();
 
@@ -313,6 +324,13 @@ namespace FEM
         private void cbxShowElements_CheckedChanged(object sender, EventArgs e)
         {
             showElements = cbxShowElements.Checked;
+            nudCubeIndex.Visible = showElements; 
+            DrawFigure();
+        }
+
+        private void nudCubeIndex_ValueChanged(object sender, EventArgs e)
+        {
+            selectedCubeIndex = (int)nudCubeIndex.Value;
             DrawFigure();
         }
     }
