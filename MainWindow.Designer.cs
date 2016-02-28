@@ -43,6 +43,8 @@
             this.cbxShowElements = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.nudCubeIndex = new System.Windows.Forms.NumericUpDown();
+            this.btnDrawPoint = new System.Windows.Forms.Button();
+            this.txtPointCoord = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -106,7 +108,7 @@
             this.glWindow.ForeColor = System.Drawing.Color.Black;
             this.glWindow.Location = new System.Drawing.Point(12, 12);
             this.glWindow.Name = "glWindow";
-            this.glWindow.Size = new System.Drawing.Size(694, 636);
+            this.glWindow.Size = new System.Drawing.Size(694, 757);
             this.glWindow.StencilBits = ((byte)(0));
             this.glWindow.TabIndex = 0;
             this.glWindow.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Window_KeyUp);
@@ -114,34 +116,33 @@
             // hsbAxisY
             // 
             this.hsbAxisY.LargeChange = 1;
-            this.hsbAxisY.Location = new System.Drawing.Point(840, 137);
+            this.hsbAxisY.Location = new System.Drawing.Point(789, 137);
             this.hsbAxisY.Maximum = 360;
             this.hsbAxisY.Name = "hsbAxisY";
-            this.hsbAxisY.Size = new System.Drawing.Size(184, 24);
+            this.hsbAxisY.Size = new System.Drawing.Size(235, 24);
             this.hsbAxisY.TabIndex = 2;
             this.hsbAxisY.Tag = "Z rotation angle";
-            this.hsbAxisY.Value = 330;
             this.hsbAxisY.ValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
             // 
             // hsbAxisX
             // 
             this.hsbAxisX.LargeChange = 1;
-            this.hsbAxisX.Location = new System.Drawing.Point(840, 96);
+            this.hsbAxisX.Location = new System.Drawing.Point(789, 96);
             this.hsbAxisX.Maximum = 360;
             this.hsbAxisX.Name = "hsbAxisX";
-            this.hsbAxisX.Size = new System.Drawing.Size(184, 24);
+            this.hsbAxisX.Size = new System.Drawing.Size(235, 24);
             this.hsbAxisX.TabIndex = 7;
             this.hsbAxisX.Tag = "Z rotation angle";
-            this.hsbAxisX.Value = 30;
+            this.hsbAxisX.Value = 300;
             this.hsbAxisX.ValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
             // 
             // hsbAxisZ
             // 
             this.hsbAxisZ.LargeChange = 1;
-            this.hsbAxisZ.Location = new System.Drawing.Point(840, 175);
+            this.hsbAxisZ.Location = new System.Drawing.Point(789, 175);
             this.hsbAxisZ.Maximum = 360;
             this.hsbAxisZ.Name = "hsbAxisZ";
-            this.hsbAxisZ.Size = new System.Drawing.Size(184, 24);
+            this.hsbAxisZ.Size = new System.Drawing.Size(235, 24);
             this.hsbAxisZ.TabIndex = 8;
             this.hsbAxisZ.Tag = "Z rotation angle";
             this.hsbAxisZ.ValueChanged += new System.EventHandler(this.ScrollBar_ValueChanged);
@@ -180,7 +181,7 @@
             // 
             // rtb
             // 
-            this.rtb.Location = new System.Drawing.Point(712, 232);
+            this.rtb.Location = new System.Drawing.Point(712, 403);
             this.rtb.Name = "rtb";
             this.rtb.Size = new System.Drawing.Size(326, 366);
             this.rtb.TabIndex = 11;
@@ -189,7 +190,7 @@
             // cbxShowElements
             // 
             this.cbxShowElements.AutoSize = true;
-            this.cbxShowElements.Location = new System.Drawing.Point(713, 209);
+            this.cbxShowElements.Location = new System.Drawing.Point(850, 15);
             this.cbxShowElements.Name = "cbxShowElements";
             this.cbxShowElements.Size = new System.Drawing.Size(96, 17);
             this.cbxShowElements.TabIndex = 12;
@@ -209,7 +210,7 @@
             // 
             // nudCubeIndex
             // 
-            this.nudCubeIndex.Location = new System.Drawing.Point(840, 209);
+            this.nudCubeIndex.Location = new System.Drawing.Point(977, 15);
             this.nudCubeIndex.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -230,12 +231,31 @@
             0});
             this.nudCubeIndex.ValueChanged += new System.EventHandler(this.nudCubeIndex_ValueChanged);
             // 
+            // btnDrawPoint
+            // 
+            this.btnDrawPoint.Location = new System.Drawing.Point(713, 250);
+            this.btnDrawPoint.Name = "btnDrawPoint";
+            this.btnDrawPoint.Size = new System.Drawing.Size(75, 23);
+            this.btnDrawPoint.TabIndex = 15;
+            this.btnDrawPoint.Text = "Draw";
+            this.btnDrawPoint.UseVisualStyleBackColor = true;
+            this.btnDrawPoint.Click += new System.EventHandler(this.btnDrawPoint_Click_1);
+            // 
+            // txtPointCoord
+            // 
+            this.txtPointCoord.Location = new System.Drawing.Point(805, 250);
+            this.txtPointCoord.Name = "txtPointCoord";
+            this.txtPointCoord.Size = new System.Drawing.Size(100, 20);
+            this.txtPointCoord.TabIndex = 16;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1033, 660);
+            this.ClientSize = new System.Drawing.Size(1033, 781);
+            this.Controls.Add(this.txtPointCoord);
+            this.Controls.Add(this.btnDrawPoint);
             this.Controls.Add(this.nudCubeIndex);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.cbxShowElements);
@@ -275,6 +295,8 @@
         private System.Windows.Forms.CheckBox cbxShowElements;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.NumericUpDown nudCubeIndex;
+        private System.Windows.Forms.Button btnDrawPoint;
+        private System.Windows.Forms.TextBox txtPointCoord;
     }
 }
 

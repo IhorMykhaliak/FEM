@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Tao.FreeGlut;
 using Tao.OpenGl;
 using System.Windows.Forms;
@@ -13,6 +14,7 @@ namespace FEM
         private Cube Cube { get; set; }
         private bool showElements = false;
         private int selectedCubeIndex;
+        private Point point;
 
         public MainWindow()
         {
@@ -47,25 +49,22 @@ namespace FEM
             DrawFigure();
         }
 
-        private void DrawFigure()
+        private Point CalculatePoint(Point point, double elementEdgeLength, int z_itr, int y_itr, int x_itr)
         {
-            if (showElements && cubeElements?.Count > 1)
+            return new Point
             {
-                DrawMultipleFigures();
-            }
-            else
-            {
-                DrawOneFigure();
-            }
+                X = x_itr * elementEdgeLength + point.X,
+                Y = y_itr * elementEdgeLength + point.Y,
+                Z = z_itr * elementEdgeLength + point.Z
+            };
         }
 
-        private void DrawOneFigure()
+        #region Drawing
+
+        private void DrawFigure()
         {
-            var cube = Cube;
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-
             Gl.glLoadIdentity();
-
             Gl.glPushMatrix();
             Gl.glTranslated(0, 0, -6);
             Gl.glRotated(hsbAxisX.Value, 1.0f, 0.0f, 0.0f);
@@ -73,51 +72,48 @@ namespace FEM
             Gl.glRotated(hsbAxisZ.Value, 0.0f, 0.0f, 1.0f);
             Gl.glScaled(scale, scale, scale);
 
-            DrawSphere(cube.Point1);
-            //DrawSphere(new Point());
-            //DrawSphere(new Point { X = 5 });
-            //DrawSphere(new Point { Y = 5 });
-            //DrawSphere(new Point { Z = 5 });
+            DrawTopPoints();
 
+            DrawCube(Cube);
 
-            DrawCube(cube);
+            if (showElements && cubeElements?.Count > 1)
+            {
+                DrawMultipleFigures();
+            }
 
             Gl.glPopMatrix();
             Gl.glFlush();
-
             glWindow.Invalidate();
         }
 
-        private static void DrawSphere(Point point)
+        private void DrawSphere(Point point)
         {
-            Gl.glColor3d(point.X, point.Y, point.Z);
+            Gl.glColor3d(100, 0, 100);
+            //Gl.glColor3d(point.X, point.Y, point.Z);
             Gl.glTranslated(point.X, point.Y, point.Z);
             Glut.glutSolidSphere(0.15f, 5, 5);
             Gl.glTranslated(-point.X, -point.Y, -point.Z);
         }
 
+        private void DrawTopPoints()
+        {
+            var z = cubeElements?.Max(c => c.Point5.Z);
+            if (z != null)
+            {
+                cubeElements.Where(e => e.ToEnumerable()
+                            .Any(p => p.Z == z))
+                            .ToList()
+                            .ForEach(c => c.ToEnumerable()
+                                           .Where(p => p.Z == z)
+                                           .ToList()
+                                           .ForEach(p => DrawSphere(p)));
+            }
+        }
+
         private void DrawMultipleFigures()
         {
-            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-
-            Gl.glLoadIdentity();
-
-            Gl.glPushMatrix();
-            Gl.glTranslated(0, 0, -6);
-            Gl.glRotated(hsbAxisX.Value, 1.0f, 0.0f, 0.0f);
-            Gl.glRotated(hsbAxisY.Value, 0.0f, 1.0f, 0.0f);
-            Gl.glRotated(hsbAxisZ.Value, 0.0f, 0.0f, 1.0f);
-            Gl.glScaled(scale, scale, scale);
-
-            DrawCube(Cube);
             foreach (var cube in cubeElements)
             {
-                if (cube == cubeElements[4])
-                {
-                    Gl.glTranslated(cube.Point1.X, cube.Point1.Y, cube.Point1.Z);
-                    Glut.glutSolidSphere(0.15f, 5, 5);
-                    Gl.glTranslated(-cube.Point1.X, -cube.Point1.Y, -cube.Point1.Z);
-                }
                 Gl.glColor3d(0, 1, 0);
 
                 if (selectedCubeIndex != cube.Index)
@@ -130,10 +126,6 @@ namespace FEM
                 }
 
             }
-            Gl.glPopMatrix();
-            Gl.glFlush();
-
-            glWindow.Invalidate();
         }
 
         private void DrawCube(Cube cube, bool setColor = true)
@@ -255,6 +247,10 @@ namespace FEM
             Gl.glEnd();
         }
 
+        #endregion
+
+        #region Event Handlers
+
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
@@ -282,14 +278,15 @@ namespace FEM
         {
             rtb.Text = "";
             int parts = (int)nudParts.Value;
+            int zparts = 2 * parts;
             double elementEdgeLength = Cube.EdgeLenght / parts;
             Point p1;
 
             cubeElements = new List<CubeElement>();
             var index = 0;
-            for (int y_itr = 0; y_itr < parts; y_itr++)
+            for (int z_itr = 0; z_itr < zparts; z_itr++)
             {
-                for (int z_itr = 0; z_itr < parts; z_itr++)
+                for (int y_itr = 0; y_itr < parts; y_itr++)
                 {
                     for (int x_itr = 0; x_itr < parts; x_itr++)
                     {
@@ -302,29 +299,19 @@ namespace FEM
             nudCubeIndex.Visible = true;
             nudCubeIndex.Maximum = cubeElements.Count;
             cbxShowElements.Checked = true;
-            DrawMultipleFigures();
+            DrawFigure();
 
-            foreach (var cube in cubeElements)
-            {
-                rtb.Text += cube.ToString();
-                rtb.Text += Environment.NewLine;
-            }
-        }
-
-        private Point CalculatePoint(Point point, double elementEdgeLength, int z_itr, int y_itr, int x_itr)
-        {
-            return new Point
-            {
-                X = x_itr * elementEdgeLength + point.X,
-                Y = y_itr * elementEdgeLength + point.Y,
-                Z = -z_itr * elementEdgeLength + point.Z
-            };
+            //foreach (var cube in cubeElements)
+            //{
+            //    rtb.Text += cube.ToString()+"\n";
+            //    rtb.Text += Environment.NewLine;
+            //}
         }
 
         private void cbxShowElements_CheckedChanged(object sender, EventArgs e)
         {
             showElements = cbxShowElements.Checked;
-            nudCubeIndex.Visible = showElements; 
+            nudCubeIndex.Visible = showElements;
             DrawFigure();
         }
 
@@ -333,5 +320,20 @@ namespace FEM
             selectedCubeIndex = (int)nudCubeIndex.Value;
             DrawFigure();
         }
+
+        private void btnDrawPoint_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDrawPoint_Click_1(object sender, EventArgs e)
+        {
+            var coords = txtPointCoord.Text.Split(new char[] { ',', ';', ' ' });
+            point = new Point(double.Parse(coords?[0]), double.Parse(coords?[1]), double.Parse(coords?[2]));
+            DrawFigure();
+        }
+
+        #endregion
+
     }
 }
